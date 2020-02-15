@@ -1,7 +1,7 @@
 [
   {
     "ParameterKey":"ProjectName",
-    "ParameterValue": "cloud9Environment"
+    "ParameterValue": "Udacity-Cloud9"
   },
   {
     "ParameterKey":"StudentName",
