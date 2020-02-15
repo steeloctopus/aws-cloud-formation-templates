@@ -1,0 +1,18 @@
+[
+  {
+    "ParameterKey":"ProjectName",
+    "ParameterValue": "cloud9Environment"
+  },
+  {
+    "ParameterKey":"StudentName",
+    "ParameterValue": "D.Milburn"
+  },
+  {
+    "ParameterKey":"PemKeyName",
+    "ParameterValue": "udacity-cloud9"
+  },
+  {
+    "ParameterKey":"RoleName",
+    "ParameterValue": "cloud9"
+  }
+]

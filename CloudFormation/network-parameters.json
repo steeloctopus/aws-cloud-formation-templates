@@ -1,0 +1,22 @@
+[
+  {
+    "ParameterKey":"ResourcePrefix",
+    "ParameterValue": "cloud9Environment"
+  },
+  {
+    "ParameterKey":"ProjectName",
+    "ParameterValue": "Udacity-Cloud9"
+  },
+  {
+    "ParameterKey":"StudentName",
+    "ParameterValue": "D.Milburn"
+  },
+  {
+    "ParameterKey": "VpcCIDR",
+    "ParameterValue": "10.0.0.0/16"
+  },
+  {
+    "ParameterKey": "PublicSubnet1CIDR",
+    "ParameterValue": "10.0.0.0/24"
+  }
+]

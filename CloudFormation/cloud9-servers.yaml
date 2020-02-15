@@ -1,0 +1,90 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: This is the setup for the server in udacity project three
+Parameters:
+
+  ProjectName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+
+  StudentName:
+    Description: Name of the student who created the resources
+    Type: String
+
+  PemKeyName:
+    Description: Name of the Key name that is required for SSH
+    Type: String
+
+  RoleName:
+    Description: Name of Roles that can be applyed to the EC2 instance
+    Type: String
+
+Resources:
+  WebServerSecGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Allow http to our hosts and SSH for all servers only
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${ProjectName}-VPCID"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectName} Jekins Sec Group
+        - Key: ProjectName
+          Value: !Ref ProjectName
+        - Key: StudentName
+          Value: !Ref StudentName
+
+  ProfileWithRolesForOurApp:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref RoleName
+
+  Cloud9Host:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-092c68f1d3b63302a # this AMI ID may not be available. Find Cloud9Default AMI image ID.
+      InstanceType: t2.micro
+      KeyName: !Ref PemKeyName
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId:
+            Fn::ImportValue:
+              !Sub "${ProjectName}-PUB1-SN"
+          GroupSet:
+            - Ref: WebServerSecGroup
+      IamInstanceProfile:
+        Ref: ProfileWithRolesForOurApp
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectName} Jenkins Host
+        - Key: ProjectName
+          Value: !Ref ProjectName
+        - Key: StudentName
+          Value: !Ref StudentName
+Outputs:
+  JenkinsHostURL:
+    Description: The cloud9 AWS URL
+    Value: !Join ["", ["http://", !GetAtt Cloud9Host.PublicDnsName ]]
+    Export:
+      Name: !Sub ${ProjectName}-DNS-NAME
+  JenkinsHostIP:
+    Description: The cloud9 AWS IP
+    Value: !Join ["", ["http://", !GetAtt Cloud9Host.PublicIp]]
+    Export:
+      Name: !Sub ${ProjectName}-IP
